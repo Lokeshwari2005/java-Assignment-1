@@ -1,0 +1,122 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+class AddressBook {
+    private String name;
+    private String phoneNumber;
+    private String email;
+    public Contact(String name, String phoneNumber, String email) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String toString() {
+        return "Name: " + name + ", Phone Number: " + phoneNumber + ", Email: " + email;
+}
+}
+class AddressBook {
+    private ArrayList<Contact> contacts;
+    public AddressBook() {
+        contacts = new ArrayList<>();
+    }
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+    }
+    public void viewAllContacts() {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            for (Contact contact : contacts) {
+                System.out.println(contact);
+            }
+        }
+    }
+
+    public void searchContactByName(String name) {
+        boolean found = false;
+        for (Contact contact : contacts) {
+            if (contact.getName().equalsIgnoreCase(name)) {
+                System.out.println(contact);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Contact not found.");
+        }
+    }
+}
+
+public class AddressBookApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        AddressBook addressBook = new AddressBook();
+        int choice;
+
+        do {
+            System.out.println("\nAddress Book Menu:");
+            System.out.println("1. Add a new contact");
+            System.out.println("2. View all contacts");
+            System.out.println("3. Search for a contact by name");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice (1-4): ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter phone number: ");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.print("Enter email address: ");
+                    String email = scanner.nextLine();
+                    Contact newContact = new Contact(name, phoneNumber, email);
+                    addressBook.addContact(newContact);
+                    System.out.println("Contact added.");
+                    break;
+
+                case 2:
+                    addressBook.viewAllContacts();
+                    break;
+
+                case 3:
+                    System.out.print("Enter the name to search: ");
+                    String searchName = scanner.nextLine();
+                    addressBook.searchContactByName(searchName);
+                    break;
+
+                case 4:
+                    System.out.println("Exiting the program.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                    break;
+            }
+        } while (choice != 4);
+
+        scanner.close();
+    }
+}
