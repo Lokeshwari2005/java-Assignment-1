@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.List;
+class Text
+{
+    public static List<String> fullJustify(String[] words, int maxWidth)
+{
+        List<String> result = new ArrayList<>();
+        int startIndex = 0;
+        
+        while (startIndex < words.length) {
+            int endIndex = findEndIndex(words, startIndex, maxWidth);
+            result.add(justifyLine(words, startIndex, endIndex, maxWidth));
+            startIndex = endIndex + 1;
+        }
+        
+        return result;
+    }
+    
+    private static int findEndIndex(String[] words, int startIndex, int maxWidth) {
+        int endIndex = startIndex;
+        int currentWidth = words[endIndex].length();
+        
+        while (endIndex + 1 < words.length && currentWidth + words[endIndex + 1].length() + 1 <= maxWidth) {
+            currentWidth += words[endIndex + 1].length() + 1; 
+            endIndex++;
+        }
+        
+        return endIndex;
+    }
+    
+    private static String justifyLine(String[] words, int startIndex, int endIndex, int maxWidth) {
+        if (startIndex == endIndex) {
+            return padRight(words[startIndex], maxWidth);
+        }
+        
+        int numWords = endIndex - startIndex + 1;
+        int totalSpaces = maxWidth - totalLength(words, startIndex, endIndex);
+        int spaceBetweenWords = numWords > 1 ? totalSpaces / (numWords - 1) : totalSpaces;
+        int extraSpaces = numWords > 1 ? totalSpaces % (numWords - 1) : 0;
+        
+        StringBuilder sb = new StringBuilder();
+        for (int i = startIndex; i <= endIndex; i++) 
+{
+            sb.append(words[i]);
+            if (i < endIndex) 
+{
+                int spaces = spaceBetweenWords + (extraSpaces-- > 0 ? 1 : 0);
+                sb.append(" ".repeat(spaces));
+            }
+        }
+        
+        return padRight(sb.toString(), maxWidth);
+    }
+    
+    private static int totalLength(String[] words, int startIndex, int endIndex) 
+{
+        int totalLength = 0;
+        for (int i = startIndex; i <= endIndex; i++) {
+            totalLength += words[i].length();
+        }
+        return totalLength;
+    }
+    
+    private static String padRight(String line, int maxWidth)
+{
+        return line + " ".repeat(maxWidth - line.length());
+    }
+
+    public static void main(String[] args) 
+{
+        String[] words = {"This", "is", "an", "example", "of", "text", "justification."};
+        int maxWidth = 16;
+        List<String> justified = fullJustify(words, maxWidth);
+        for (String line : justified)
+{
+            System.out.println("\"" + line + "\"");
+        }
+    }
+}
